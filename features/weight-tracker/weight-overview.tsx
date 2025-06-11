@@ -75,9 +75,9 @@ export function WeightOverview({ data, goalWeight, timeRange }: WeightOverviewPr
   }, [data, goalWeight])
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full h-full">
+    <div className="grid grid-cols-9 gap-5 w-full h-full">
       {/* Left Card - Total Weight Loss */}
-      <div className="bg-putty rounded-2xl p-4 flex flex-col justify-between">
+      <div className="col-span-4 bg-putty rounded-2xl p-4 flex flex-col justify-between">
         <h2 className="text-sm font-medium text-dark text-center">Total Weight Loss</h2>
         <div className="text-center my-3">
           <span className="text-4xl font-bold text-teal-400">{Math.abs(weightLoss).toFixed(0)}</span>
@@ -102,12 +102,12 @@ export function WeightOverview({ data, goalWeight, timeRange }: WeightOverviewPr
       </div>
 
       {/* Right Side - Weight Stats Grid */}
-      <div className="flex flex-col justify-between">
+      <div className="col-span-5 flex flex-col justify-between">
         <StatCard label="Starting Weight" date={startDate} weight={startWeight} barColor="bg-teal-400" />
         <StatCard label="Current Weight" date={currentDate} weight={currentWeight} barColor="bg-teal-400" />
         <StatCard label="Goal Weight" weight={goalWeight} barColor="bg-coral-400" highlight />
-        <div className="bg-white rounded-2xl p-3 flex items-center justify-center border border-gray-200/80 min-h-[50px]">
-          <p className="text-xs text-gray-600 italic text-center">&ldquo;{currentQuote}&rdquo;</p>
+        <div className="bg-white rounded-2xl p-4 flex items-center justify-center border border-gray-200/80 min-h-[60px]">
+          <p className="text-sm text-gray-600 italic text-center">&ldquo;{currentQuote}&rdquo;</p>
         </div>
       </div>
     </div>

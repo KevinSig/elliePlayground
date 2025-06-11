@@ -33,6 +33,10 @@ export function BodyTracker() {
   const filterOptions: FilterOption[] = ["1W", "1M", "3M", "6M", "1Y", "ALL"]
   const viewOptions = ["tracker", "overview"]
 
+  const handleViewModeChange = (value: string) => {
+    setViewMode(value as ViewMode)
+  }
+
   // Simplified data filtering for demonstration.
   // A real implementation would filter based on current date and selected range.
   const filteredData = React.useMemo(() => {
@@ -62,13 +66,9 @@ export function BodyTracker() {
   console.log("Filtered Data for Chart:", filteredData)
   console.log("Number of data points:", filteredData.length)
 
-  const handleViewModeChange = (value: string) => {
-    setViewMode(value as ViewMode)
-  }
-
   return (
     <div className="bg-light min-h-screen flex justify-center items-start p-4 sm:p-6 md:p-8">
-      <Card className="w-[600px] h-[400px] p-5 shadow-lg rounded-2xl bg-white border-0 grid grid-rows-[auto_auto_1fr] gap-4">
+      <Card className="w-[600px] h-[400px] p-5 shadow-lg rounded-2xl bg-white border-0 grid grid-rows-[auto_1fr] gap-4">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-serif text-dark">Body Tracker</h1>
           <div className="flex items-center space-x-1">
@@ -87,41 +87,27 @@ export function BodyTracker() {
           </div>
         </div>
 
-        <div className="flex space-x-4">
-          {filterOptions.map((filter) => (
-            <Button
-              key={filter}
-              variant="outline"
-              size="sm"
-              onClick={() => setActiveFilter(filter)}
-              className={`
-                rounded-full px-2 py-0.5 text-[10px] font-medium border transition-all whitespace-nowrap h-6 w-10 flex items-center justify-center
-                ${
-                  activeFilter === filter
-                    ? "bg-teal-400 text-white hover:bg-teal-400/90 border-teal-400"
-                    : "bg-teal-100 text-teal-400 hover:bg-teal-200 border-teal-100 hover:border-teal-200"
-                }
-              `}
-            >
-              {filter}
-            </Button>
-          ))}
-        </div>
-
         <div className="min-h-0 relative">
           <div 
             className={`absolute inset-0 transition-opacity duration-300 ${
               viewMode === "tracker" ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}
           >
-            <WeightChart data={filteredData} goalWeight={goalWeight} timeRange={activeFilter} />
+            <WeightChart 
+              data={filteredData} 
+              goalWeight={goalWeight} 
+              timeRange={activeFilter}
+              activeFilter={activeFilter}
+              onFilterChange={setActiveFilter}
+              filterOptions={filterOptions}
+            />
           </div>
           <div 
             className={`absolute inset-0 transition-opacity duration-300 ${
               viewMode === "overview" ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}
           >
-            <WeightOverview data={filteredData} goalWeight={goalWeight} timeRange={activeFilter} />
+            <WeightOverview data={mockData} goalWeight={goalWeight} timeRange="Overall" />
           </div>
         </div>
       </Card>

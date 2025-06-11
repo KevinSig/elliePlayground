@@ -3,6 +3,7 @@
 import * as React from "react"
 import { Line, LineChart, XAxis, YAxis, CartesianGrid, ReferenceLine, ResponsiveContainer } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart"
+import { Button } from "@/components/ui/button"
 import type { NameType, ValueType } from "recharts/types/component/DefaultTooltipContent"
 
 interface WeightEntry {
@@ -10,10 +11,15 @@ interface WeightEntry {
   weight: number
 }
 
+type FilterOption = "1W" | "1M" | "3M" | "6M" | "1Y" | "ALL"
+
 interface WeightChartProps {
   data: WeightEntry[]
   goalWeight: number
-  timeRange?: string // e.g., "3M", "1Y", "ALL"
+  timeRange?: string
+  activeFilter: FilterOption
+  onFilterChange: (filter: FilterOption) => void
+  filterOptions: FilterOption[]
 }
 
 const chartConfig = {
@@ -67,7 +73,14 @@ const CustomGoalLabel = (props: any) => {
   )
 }
 
-export function WeightChart({ data, goalWeight, timeRange = "3M" }: WeightChartProps) {
+export function WeightChart({ data, goalWeight, timeRange = "3M", activeFilter, onFilterChange, filterOptions }: WeightChartProps) {
+  // Calculate weight loss for display
+  const currentWeight = data[data.length - 1]?.weight ?? 0
+  const startWeight = data[0]?.weight ?? 0
+  const weightLoss = startWeight - currentWeight
+  const totalWeightToLose = startWeight - goalWeight
+  const progressPercentage = totalWeightToLose > 0 ? Math.max(0, Math.min(100, (weightLoss / totalWeightToLose) * 100)) : 0
+
   const formattedData = React.useMemo(() => {
     return data.map((entry) => ({
       ...entry,
@@ -107,95 +120,138 @@ export function WeightChart({ data, goalWeight, timeRange = "3M" }: WeightChartP
   }, [formattedData, timeRange])
 
   return (
-    <ChartContainer config={chartConfig} className="w-full h-full ">
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-          accessibilityLayer
-          data={formattedData}
-          margin={{
-            top: 0,
-            right: 0,
-            left: 0,
-            bottom: 0,
-          }}
-        >
-          <CartesianGrid vertical={false} strokeDasharray="2 2" stroke="#E5E5E5" opacity={0.7} />
-          <XAxis
-            dataKey="date"
-            tickFormatter={(value) => new Date(value).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit" })}
-            tickLine={false}
-            axisLine={false}
-            
-            padding={{ left: 8, right: 8 }}
-            ticks={xTicks}
-            tick={{ fill: "#333333", fontSize: 11 }}
-            label={{
-              value: "Date",
-              position: "insideBottom",
-              
-              style: { fill: "#333333", fontSize: "12px", fontWeight: "600" },
-            }}
-          />
-          <YAxis
-            tickFormatter={(value) => `${value}`}
-            domain={yDomain}
-            tickLine={false}
-            axisLine={false}
-            
-            width={60}
-            tick={{ fill: "#333333", fontSize: 11 }}
-            label={{
-              value: "Pounds (lbs)",
-              angle: -90,
-              position: "insideLeft",
-              offset: 5,
-              style: { textAnchor: "middle", fill: "#333333", fontSize: "12px", fontWeight: "600" },
-            }}
-          />
-          <ChartTooltip
-            cursor={true}
-            content={
-              <ChartTooltipContent
-                className="w-[150px] bg-white border border-gray-200 shadow-lg rounded-lg"
-                nameKey="weight"
-                labelFormatter={(value) =>
-                  new Date(value).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
+    <div className="w-full h-full flex flex-col gap-3">
+      {/* Filter Buttons and Weight Loss Display */}
+      <div className="flex justify-between items-center">
+        <div className="flex space-x-4">
+          {filterOptions.map((filter) => (
+            <Button
+              key={filter}
+              variant="outline"
+              size="sm"
+              onClick={() => onFilterChange(filter)}
+              className={`
+                rounded-full px-2 py-0.5 text-[10px] font-medium border transition-all whitespace-nowrap h-6 w-10 flex items-center justify-center
+                ${
+                  activeFilter === filter
+                    ? "bg-teal-400 text-white hover:bg-teal-400/90 border-teal-400"
+                    : "bg-teal-100 text-teal-400 hover:bg-teal-200 border-teal-100 hover:border-teal-200"
                 }
-                indicator="line"
-                formatter={(value: ValueType, name: NameType) => [
-                  `${value} lbs`,
-                  name === "weight" ? "Weight" : String(name),
-                ]}
+              `}
+            >
+              {filter}
+            </Button>
+          ))}
+        </div>
+        
+        {/* Weight Loss Display */}
+        <div className="text-right">
+          <div className="flex items-center gap-3">
+            <div className="flex items-baseline gap-1">
+              <span className="text-lg font-bold text-teal-400">{Math.abs(weightLoss).toFixed(0)}</span>
+              <span className="text-sm font-medium text-dark">lbs lost</span>
+            </div>
+            <div className="text-xs text-gray-400">•</div>
+            <div className="text-sm font-medium text-gray-600">
+              {progressPercentage.toFixed(0)}% to goal
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Chart */}
+      <div className="flex-1 min-h-0">
+        <ChartContainer config={chartConfig} className="w-full h-full [&>div]:!aspect-auto">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              accessibilityLayer
+              data={formattedData}
+              margin={{
+                top: 5,
+                right: 5,
+                left: 5,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid vertical={false} strokeDasharray="2 2" stroke="#E5E5E5" opacity={0.7} />
+              <XAxis
+                dataKey="date"
+                tickFormatter={(value) => new Date(value).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit" })}
+                tickLine={false}
+                axisLine={false}
+                
+                padding={{ left: 8, right: 8 }}
+                ticks={xTicks}
+                tick={{ fill: "#333333", fontSize: 11 }}
+                label={{
+                  value: "Date",
+                  position: "insideBottom",
+                  
+                  style: { fill: "#333333", fontSize: "12px", fontWeight: "600" },
+                }}
               />
-            }
-          />
-          <ReferenceLine
-            y={goalWeight}
-            stroke="#FA5B4C"
-            strokeWidth={2}
-            strokeDasharray="5 5"
-            label={<CustomGoalLabel value={goalWeight} />}
-          />
-          <Line
-            dataKey="weight"
-            type="monotone"
-            stroke="#079393"
-            strokeWidth={3}
-            dot={{
-              fill: "#079393",
-              stroke: "#079393",
-              strokeWidth: 0,
-              r: 6,
-            }}
-            activeDot={{
-              fill: "#079393",
-              r: 8,
-              strokeWidth: 3,
-              stroke: "#ffffff",
-            }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </ChartContainer>
+              <YAxis
+                tickFormatter={(value) => `${value}`}
+                domain={yDomain}
+                tickLine={false}
+                axisLine={false}
+                
+                width={60}
+                tick={{ fill: "#333333", fontSize: 11 }}
+                label={{
+                  value: "Pounds (lbs)",
+                  angle: -90,
+                  position: "insideLeft",
+                  offset: 5,
+                  style: { textAnchor: "middle", fill: "#333333", fontSize: "12px", fontWeight: "600" },
+                }}
+              />
+              <ChartTooltip
+                cursor={true}
+                content={
+                  <ChartTooltipContent
+                    className="w-[150px] bg-white border border-gray-200 shadow-lg rounded-lg"
+                    nameKey="weight"
+                    labelFormatter={(value) =>
+                      new Date(value).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
+                    }
+                    indicator="line"
+                    formatter={(value: ValueType, name: NameType) => [
+                      `${value} lbs`,
+                      name === "weight" ? "Weight" : String(name),
+                    ]}
+                  />
+                }
+              />
+              <ReferenceLine
+                y={goalWeight}
+                stroke="#FA5B4C"
+                strokeWidth={2}
+                strokeDasharray="5 5"
+                label={<CustomGoalLabel value={goalWeight} />}
+              />
+              <Line
+                dataKey="weight"
+                type="monotone"
+                stroke="#079393"
+                strokeWidth={3}
+                dot={{
+                  fill: "#079393",
+                  stroke: "#079393",
+                  strokeWidth: 0,
+                  r: 6,
+                }}
+                activeDot={{
+                  fill: "#079393",
+                  r: 8,
+                  strokeWidth: 3,
+                  stroke: "#ffffff",
+                }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </ChartContainer>
+      </div>
+    </div>
   )
 }
