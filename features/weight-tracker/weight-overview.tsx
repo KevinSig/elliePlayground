@@ -2,11 +2,7 @@
 
 import * as React from "react"
 import { useMemo } from "react"
-
-interface WeightEntry {
-  date: string
-  weight: number
-}
+import { type WeightEntry } from "./weight-dialog"
 
 interface WeightOverviewProps {
   data: WeightEntry[]
@@ -96,7 +92,7 @@ export function WeightOverview({ data, goalWeight, timeRange }: WeightOverviewPr
           </div>
           <div className="flex justify-between text-xs text-gray-500 pt-1">
             <span>{isGoalAchieved ? "Goal Achieved! 🎉" : `${remainingWeight.toFixed(1)} lbs to go`}</span>
-            {timeRange && <span>{timeRange}</span>}
+            {timeRange && timeRange !== "Overall" && <span>{timeRange}</span>}
           </div>
         </div>
       </div>

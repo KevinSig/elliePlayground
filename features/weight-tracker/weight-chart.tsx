@@ -210,7 +210,7 @@ export function WeightChart({ data, goalWeight, timeRange = "3M", activeFilter, 
                 cursor={true}
                 content={
                   <ChartTooltipContent
-                    className="w-[150px] bg-white border border-gray-200 shadow-lg rounded-lg"
+                    className="w-[150px] bg-white border border-gray-200 rounded-lg"
                     nameKey="weight"
                     labelFormatter={(value) =>
                       new Date(value).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })

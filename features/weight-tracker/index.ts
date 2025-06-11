@@ -1,3 +1,5 @@
 export { BodyTracker } from "./body-tracker"
 export { WeightChart } from "./weight-chart"
-export { WeightOverview } from "./weight-overview" 
+export { WeightOverview } from "./weight-overview"
+export { WeightDialog, type WeightEntry } from "./weight-dialog"
+export { ManageEntriesDialog } from "./manage-entries-dialog" 
