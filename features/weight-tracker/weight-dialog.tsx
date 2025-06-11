@@ -83,9 +83,9 @@ function DatePicker({
         key={day}
         onClick={() => onSelect(date)}
         className={cn(
-          "h-8 w-8 rounded-md text-sm hover:bg-gray-100 focus:bg-gray-100",
-          isSelected && "bg-teal-400 text-white hover:bg-teal-500",
-          isToday && !isSelected && "bg-gray-200 font-semibold"
+          "h-8 w-8 rounded-lg text-sm hover:bg-black-100 focus:bg-black-100 transition-colors",
+          isSelected && "bg-teal-400 text-white hover:bg-teal-400",
+          isToday && !isSelected && "bg-black-100 font-semibold"
         )}
       >
         {day}
@@ -94,22 +94,22 @@ function DatePicker({
   }
   
   return (
-    <div className="p-3">
+    <div className="p-4">
       <div className="flex items-center justify-between mb-4">
         <button
           onClick={goToPreviousMonth}
-          className="p-1 hover:bg-gray-100 rounded-md"
+          className="p-1 hover:bg-black-100 rounded-lg transition-colors"
         >
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
-        <h2 className="font-semibold text-sm">
+        <h2 className="font-semibold text-sm text-dark">
           {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
         </h2>
         <button
           onClick={goToNextMonth}
-          className="p-1 hover:bg-gray-100 rounded-md"
+          className="p-1 hover:bg-black-100 rounded-lg transition-colors"
         >
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -119,7 +119,7 @@ function DatePicker({
       
       <div className="grid grid-cols-7 gap-1 mb-2">
         {dayNames.map(day => (
-          <div key={day} className="h-8 flex items-center justify-center text-xs font-medium text-gray-500">
+          <div key={day} className="h-8 flex items-center justify-center text-xs font-medium text-black-400">
             {day}
           </div>
         ))}
@@ -205,24 +205,24 @@ export function WeightDialog({ isOpen, onOpenChange, mode, entryToEdit, onSaveEn
   const buttonText = isEditMode ? "Save Changes" : "Add Entry"
 
   return (
-    <div className="absolute inset-0 z-50 flex items-center justify-center animate-in fade-in duration-200">
+    <div className="absolute inset-0 z-50 flex items-center justify-center">
       {/* Backdrop with subtle blur effect - only for add mode */}
       {mode === 'add' && (
         <div 
-          className="absolute inset-0 bg-white/60 backdrop-blur-[1px] rounded-2xl animate-in fade-in duration-300"
+          className="absolute inset-0 bg-white/60 backdrop-blur-sm rounded-2xl"
           onClick={handleClose}
         />
       )}
       
       {/* Modal content */}
-      <div className="relative bg-white border border-gray-200 rounded-xl shadow-xl p-6 w-96 mx-4 animate-in fade-in zoom-in-95 duration-300">
+      <div className="relative bg-white border border-black-100 rounded-2xl shadow-lg p-6 w-96 mx-4 animate-in fade-in zoom-in-95 duration-200">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-dark">{title}</h3>
           <Button
             variant="ghost"
             size="icon"
             onClick={handleClose}
-            className="h-8 w-8 rounded-full hover:bg-gray-100"
+            className="h-8 w-8 rounded-full hover:bg-black-100"
           >
             <X className="h-4 w-4" />
           </Button>
@@ -238,8 +238,8 @@ export function WeightDialog({ isOpen, onOpenChange, mode, entryToEdit, onSaveEn
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !selectedDate && "text-muted-foreground"
+                    "w-full justify-start text-left font-normal rounded-full",
+                    !selectedDate && "text-black-300"
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
@@ -275,8 +275,8 @@ export function WeightDialog({ isOpen, onOpenChange, mode, entryToEdit, onSaveEn
           </div>
           
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-3 animate-in slide-in-from-top-2 duration-200">
-              <p className="text-red-600 text-sm">{error}</p>
+            <div className="bg-coral-100 border border-coral-200 rounded-lg p-3 animate-in slide-in-from-top-2 duration-200">
+              <p className="text-coral-400 text-sm">{error}</p>
             </div>
           )}
           
@@ -290,25 +290,26 @@ export function WeightDialog({ isOpen, onOpenChange, mode, entryToEdit, onSaveEn
                 icon={Trash2}
                 iconPlacement="left"
                 onClick={handleDelete}
-                className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 hover:!text-red-600 [&_svg]:text-red-600 hover:[&_svg]:!text-red-600"
+                className="text-coral-400 border-coral-200 hover:bg-coral-100 hover:border-coral-300"
               >
                 Delete
               </Button>
             )}
             
             {/* Right side buttons */}
-            <div className="flex space-x-3 ml-auto">
+            <div className="flex gap-3 ml-auto">
               <Button
                 type="button"
                 variant="outline"
                 onClick={handleClose}
+                className="rounded-full"
               >
                 Cancel
               </Button>
               <Button 
                 type="button" 
                 onClick={handleSubmit}
-                className="bg-teal-400 text-white hover:bg-teal-500"
+                className="bg-teal-400 text-white hover:bg-teal-400/90 rounded-full"
               >
                 {buttonText}
               </Button>

@@ -23,7 +23,6 @@ export interface FancySwitchProps<T extends OptionType>
 	disabledKey?: keyof T & string;
 	radioClassName?: string;
 	highlighterClassName?: string;
-	highlighterIncludeMargin?: boolean;
 	highlighterStyle?: React.CSSProperties;
 	disabledOptions?: Array<T extends OptionObject ? T[keyof T] : T>;
 	renderOption?: (props: {
@@ -31,7 +30,7 @@ export interface FancySwitchProps<T extends OptionType>
 			? T & { label: string; value: OptionValue; disabled: boolean }
 			: { label: string; value: T; disabled: boolean };
 		isSelected: boolean;
-		getOptionProps: () => Record<string, any>;
+		getOptionProps: () => Record<string, string | boolean | OptionValue>;
 	}) => React.ReactNode;
 }
 
@@ -44,7 +43,6 @@ export function FancySwitch<T extends OptionType>({
 	disabledKey = 'disabled' as keyof T & string,
 	radioClassName,
 	highlighterClassName,
-	highlighterIncludeMargin = false,
 	highlighterStyle: customHighlighterStyle,
 	disabledOptions = [],
 	renderOption,
@@ -86,7 +84,7 @@ export function FancySwitch<T extends OptionType>({
 			const optionValue = getOptionValue(option);
 
 			// Check in disabledOptions array
-			if (disabledOptions.includes(optionValue as any)) {
+			if (disabledOptions.some(disabled => disabled === optionValue)) {
 				return true;
 			}
 
@@ -170,7 +168,7 @@ export function FancySwitch<T extends OptionType>({
 		return () => {
 			resizeObserver.disconnect();
 		};
-	}, [selectedIndex, options, value]);
+	}, [selectedIndex, options, value, updateHighlighter]);
 
 	// Ensure highlighter is positioned correctly on initial render
 	React.useEffect(() => {
@@ -188,7 +186,7 @@ export function FancySwitch<T extends OptionType>({
 			if (isOptionDisabled(option)) return;
 
 			const optionValue = getOptionValue(option);
-			onChange?.(optionValue as any);
+			onChange?.(optionValue as T extends OptionObject ? T[keyof T] : T);
 		},
 		[onChange, getOptionValue, isOptionDisabled],
 	);
@@ -234,11 +232,12 @@ export function FancySwitch<T extends OptionType>({
 					'data-disabled': isDisabled,
 				});
 
-				const optionProps = {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const optionProps: any = {
 					option:
 						typeof option === 'object' && option !== null
 							? {
-									...option,
+									...(option as OptionObject),
 									label: optionLabel,
 									value: optionValue,
 									disabled: isDisabled,
@@ -246,7 +245,7 @@ export function FancySwitch<T extends OptionType>({
 							: { label: optionLabel, value: option, disabled: isDisabled },
 					isSelected,
 					getOptionProps,
-				} as any;
+				};
 
 				if (renderOption) {
 					return (

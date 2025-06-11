@@ -104,11 +104,11 @@ export function BodyTracker() {
 
   return (
     <div className='bg-light min-h-screen flex justify-center items-start p-4 sm:p-6 md:p-8'>
-      <Card className='relative w-[600px] h-[400px] p-5 rounded-2xl bg-white border-0 grid grid-rows-[auto_1fr] gap-4'>
+      <Card className='relative w-[600px] h-[400px] p-5 rounded-2xl bg-white border border-black-100 shadow-lg grid grid-rows-[auto_1fr] gap-4'>
         <div className='flex justify-between items-center'>
-          <h1 className='text-2xl font-serif text-dark'>Body Tracker</h1>
-          <div className="flex items-center space-x-3">
-            <div>
+          <h1 className='text-2xl font-semibold text-dark'>Body Tracker</h1>
+          <div className="flex items-center gap-3">
+            <div className="flex gap-2">
               <Button
                 variant='ghost'
                 effect='animatedIcon'
@@ -121,13 +121,12 @@ export function BodyTracker() {
                 Input Weight
               </Button>
 
-
               <Button
                 variant='ghost'
                 effect='animatedIcon'
                 icon={Pencil}
                 iconPlacement='left'
-                aria-label='Add Entry'
+                aria-label='Edit Entries'
                 className='h-[28px] px-2 py-1 text-xs font-medium rounded-full'
                 onClick={() => setIsManageModalOpen(true)}
               >
@@ -138,14 +137,14 @@ export function BodyTracker() {
               value={viewMode}
               onChange={handleViewModeChange}
               options={viewOptions}
-              className='bg-gray-100'
+              className='bg-black-100'
             />
           </div>
         </div>
 
         <div className='min-h-0 relative'>
           <div
-            className={`absolute inset-0 transition-opacity duration-300 ${
+            className={`absolute inset-0 transition-opacity duration-200 ${
               viewMode === 'tracker'
                 ? 'opacity-100'
                 : 'opacity-0 pointer-events-none'
@@ -161,7 +160,7 @@ export function BodyTracker() {
             />
           </div>
           <div
-            className={`absolute inset-0 transition-opacity duration-300 ${
+            className={`absolute inset-0 transition-opacity duration-200 ${
               viewMode === 'overview'
                 ? 'opacity-100'
                 : 'opacity-0 pointer-events-none'

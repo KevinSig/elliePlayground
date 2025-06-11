@@ -123,7 +123,7 @@ export function WeightChart({ data, goalWeight, timeRange = "3M", activeFilter, 
     <div className="w-full h-full flex flex-col gap-3">
       {/* Filter Buttons and Weight Loss Display */}
       <div className="flex justify-between items-center">
-        <div className="flex space-x-4">
+        <div className="flex gap-2">
           {filterOptions.map((filter) => (
             <Button
               key={filter}
@@ -131,7 +131,7 @@ export function WeightChart({ data, goalWeight, timeRange = "3M", activeFilter, 
               size="sm"
               onClick={() => onFilterChange(filter)}
               className={`
-                rounded-full px-2 py-0.5 text-[10px] font-medium border transition-all whitespace-nowrap h-6 w-10 flex items-center justify-center
+                rounded-full px-2 py-0.5 text-[10px] font-medium border transition-colors whitespace-nowrap h-6 w-10 flex items-center justify-center
                 ${
                   activeFilter === filter
                     ? "bg-teal-400 text-white hover:bg-teal-400/90 border-teal-400"
@@ -148,11 +148,11 @@ export function WeightChart({ data, goalWeight, timeRange = "3M", activeFilter, 
         <div className="text-right">
           <div className="flex items-center gap-3">
             <div className="flex items-baseline gap-1">
-              <span className="text-lg font-bold text-teal-400">{Math.abs(weightLoss).toFixed(0)}</span>
+              <span className="text-lg font-semibold text-teal-400">{Math.abs(weightLoss).toFixed(0)}</span>
               <span className="text-sm font-medium text-dark">lbs lost</span>
             </div>
-            <div className="text-xs text-gray-400">•</div>
-            <div className="text-sm font-medium text-gray-600">
+            <div className="text-xs text-black-400">•</div>
+            <div className="text-sm font-medium text-black-400">
               {progressPercentage.toFixed(0)}% to goal
             </div>
           </div>
@@ -173,7 +173,7 @@ export function WeightChart({ data, goalWeight, timeRange = "3M", activeFilter, 
                 bottom: 5,
               }}
             >
-              <CartesianGrid vertical={false} strokeDasharray="2 2" stroke="#E5E5E5" opacity={0.7} />
+              <CartesianGrid vertical={false} strokeDasharray="2 2" stroke="#C3C3C4" opacity={0.5} />
               <XAxis
                 dataKey="date"
                 tickFormatter={(value) => new Date(value).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit" })}
@@ -210,7 +210,7 @@ export function WeightChart({ data, goalWeight, timeRange = "3M", activeFilter, 
                 cursor={true}
                 content={
                   <ChartTooltipContent
-                    className="w-[150px] bg-white border border-gray-200 rounded-lg"
+                    className="w-[150px] bg-white border border-black-100 rounded-lg"
                     nameKey="weight"
                     labelFormatter={(value) =>
                       new Date(value).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
@@ -245,7 +245,7 @@ export function WeightChart({ data, goalWeight, timeRange = "3M", activeFilter, 
                   fill: "#079393",
                   r: 8,
                   strokeWidth: 3,
-                  stroke: "#ffffff",
+                  stroke: "#FFFFFF",
                 }}
               />
             </LineChart>

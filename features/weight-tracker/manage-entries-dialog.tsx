@@ -46,15 +46,15 @@ export function ManageEntriesDialog({
 
   return (
     <>
-      <div className="absolute inset-0 z-50 flex items-center justify-center animate-in fade-in duration-200">
+      <div className="absolute inset-0 z-50 flex items-center justify-center">
         {/* Backdrop with subtle blur effect - scoped to component */}
         <div 
-          className="absolute inset-0 bg-white/60 backdrop-blur-[1px] rounded-2xl animate-in fade-in duration-300"
+          className="absolute inset-0 bg-white/60 backdrop-blur-sm rounded-2xl"
           onClick={handleClose}
         />
         
         {/* Modal content */}
-        <div className="relative bg-white border border-gray-200 rounded-xl shadow-xl p-6 w-96 mx-4 animate-in fade-in zoom-in-95 duration-300 max-h-[320px] grid grid-rows-[auto_1fr_auto] gap-2">
+        <div className="relative bg-white border border-black-100 rounded-2xl shadow-lg p-6 w-96 mx-4 animate-in fade-in zoom-in-95 duration-200 max-h-[320px] grid grid-rows-[auto_1fr_auto] gap-2">
           {/* Header */}
           <div className="flex items-center justify-between pb-2">
             <h3 className="text-lg font-semibold text-dark">Manage Weight Entries</h3>
@@ -62,7 +62,7 @@ export function ManageEntriesDialog({
               variant="ghost"
               size="icon"
               onClick={handleClose}
-              className="h-8 w-8 rounded-full hover:bg-gray-100"
+              className="h-8 w-8 rounded-full hover:bg-black-100"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -72,26 +72,26 @@ export function ManageEntriesDialog({
           <div className="min-h-0 overflow-hidden">
             <ScrollArea className="h-full -mx-2 px-2">
               {sortedEntries.length === 0 ? (
-                <p className="text-center text-gray-500 py-8">No entries yet.</p>
+                <p className="text-center text-black-300 py-8">No entries yet.</p>
               ) : (
-                <div className="space-y-1.5">
+                <div className="space-y-2">
                   {sortedEntries.map((entry) => (
                     <div
                       key={entry.id}
-                      className="flex items-center justify-between py-2 px-4 bg-gray-50 rounded-full hover:bg-gray-100 transition-colors"
+                      className="flex items-center justify-between py-2 px-4 bg-light rounded-full hover:bg-putty transition-colors"
                     >
-                                              <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-3">
-                            <p className="font-medium text-dark text-sm">{entry.weight} lbs</p>
-                            <p className="text-sm text-gray-500">
-                              {new Date(entry.date).toLocaleDateString("en-US", {
-                                month: "short",
-                                day: "numeric",
-                                year: "2-digit",
-                              })}
-                            </p>
-                          </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3">
+                          <p className="font-medium text-dark text-sm">{entry.weight} lbs</p>
+                          <p className="text-sm text-black-400">
+                            {new Date(entry.date).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                              year: "2-digit",
+                            })}
+                          </p>
                         </div>
+                      </div>
                       <div className="flex gap-1">
                         <Button
                           variant="ghost"
@@ -110,11 +110,12 @@ export function ManageEntriesDialog({
           </div>
           
           {/* Footer */}
-          <div className="flex justify-end">
+          <div className="flex justify-end pt-2">
             <Button
               type="button"
               variant="outline"
               onClick={handleClose}
+              className="rounded-full"
             >
               Close
             </Button>

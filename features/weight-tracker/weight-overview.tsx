@@ -71,7 +71,7 @@ export function WeightOverview({ data, goalWeight, timeRange }: WeightOverviewPr
   }, [data, goalWeight])
 
   return (
-    <div className="grid grid-cols-9 gap-5 w-full h-full">
+    <div className="grid grid-cols-9 gap-4 w-full h-full">
       {/* Left Card - Total Weight Loss */}
       <div className="col-span-4 bg-putty rounded-2xl p-4 flex flex-col justify-between">
         <h2 className="text-sm font-medium text-dark text-center">Total Weight Loss</h2>
@@ -84,13 +84,13 @@ export function WeightOverview({ data, goalWeight, timeRange }: WeightOverviewPr
             <span className="text-dark font-medium">Progress to Goal</span>
             <span className="font-semibold text-teal-400">{progressPercentage.toFixed(0)}%</span>
           </div>
-          <div className="w-full bg-gray-300 rounded-full h-2">
+          <div className="w-full bg-black-200 rounded-full h-2">
             <div 
-              className="bg-teal-400 h-2 rounded-full transition-all duration-700 ease-out"
+              className="bg-teal-400 h-2 rounded-full transition-all duration-500 ease-out"
               style={{ width: `${progressPercentage}%` }}
             />
           </div>
-          <div className="flex justify-between text-xs text-gray-500 pt-1">
+          <div className="flex justify-between text-xs text-black-400 pt-1">
             <span>{isGoalAchieved ? "Goal Achieved! 🎉" : `${remainingWeight.toFixed(1)} lbs to go`}</span>
             {timeRange && timeRange !== "Overall" && <span>{timeRange}</span>}
           </div>
@@ -98,12 +98,12 @@ export function WeightOverview({ data, goalWeight, timeRange }: WeightOverviewPr
       </div>
 
       {/* Right Side - Weight Stats Grid */}
-      <div className="col-span-5 flex flex-col justify-between">
+      <div className="col-span-5 flex flex-col justify-between gap-3">
         <StatCard label="Starting Weight" date={startDate} weight={startWeight} barColor="bg-teal-400" />
         <StatCard label="Current Weight" date={currentDate} weight={currentWeight} barColor="bg-teal-400" />
         <StatCard label="Goal Weight" weight={goalWeight} barColor="bg-coral-400" highlight />
-        <div className="bg-white rounded-2xl p-4 flex items-center justify-center border border-gray-200/80 min-h-[60px]">
-          <p className="text-sm text-gray-600 italic text-center">&ldquo;{currentQuote}&rdquo;</p>
+        <div className="bg-white rounded-2xl p-4 flex items-center justify-center border border-black-100 min-h-[60px]">
+          <p className="text-sm text-black-400 italic text-center">&ldquo;{currentQuote}&rdquo;</p>
         </div>
       </div>
     </div>
@@ -120,13 +120,13 @@ interface StatCardProps {
 
 function StatCard({ label, date, weight, barColor, highlight = false }: StatCardProps) {
   return (
-    <div className={`rounded-2xl p-3 flex items-center gap-3 ${highlight ? "bg-teal-100" : "bg-white"}`}>
-      <div className={`w-1.5 h-7 ${barColor} rounded-full`} />
+    <div className={`rounded-2xl p-3 flex items-center gap-3 ${highlight ? "bg-teal-100" : "bg-white border border-black-100"}`}>
+      <div className={`w-1.5 h-8 ${barColor} rounded-full`} />
       <div className="flex-1 min-w-0">
         <p className="text-dark font-medium text-sm">{label}</p>
-        {date && <p className="text-gray-500 text-xs">{date}</p>}
+        {date && <p className="text-black-400 text-xs">{date}</p>}
       </div>
-      <p className="text-base font-bold text-dark whitespace-nowrap">{weight} lbs</p>
+      <p className="text-base font-semibold text-dark whitespace-nowrap">{weight} lbs</p>
     </div>
   )
 } 
