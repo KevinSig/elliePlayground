@@ -34,6 +34,7 @@ export interface FancySwitchProps<T extends OptionType>
 	}) => React.ReactNode;
 }
 
+
 export function FancySwitch<T extends OptionType>({
 	value,
 	onChange,
